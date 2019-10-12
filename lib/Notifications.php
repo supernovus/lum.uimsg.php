@@ -101,7 +101,7 @@ class Notifications
   {
     if (count($this->messages) > 0)
     {
-      $core = \Nano\Core::getInstance();
+      $core = \Lum\Core::getInstance();
       $sess = $core->sess;
       $sess->notifications = $this;
     }
@@ -204,7 +204,7 @@ class Notifications
   }
 }
 
-class Notification extends \Nano\Data\Arrayish
+class Notification extends \Lum\Data\Arrayish
 {
   protected $newconst = true;
 
