@@ -387,9 +387,16 @@ class Strings implements \ArrayAccess
    *
    * @return array  [$stringid => $stringtext]
    */
-  public function strArray ($array, $prefix='', $opts=[])
+  public function strArray (array $array, string $prefix='', array $opts=[])
+    : array
   {
+    if (count($array) == 0 && isset($prefix) && trim($prefix) != '')
+    { // Empty array, but defined prefix, let's get all prefixed keys.
+      $array = $this->findKeys("/^$prefix/", true, $opts);
+    }
+
     $assoc = [];
+
     foreach ($array as $index => $value)
     {
       if (is_numeric($index))
@@ -409,7 +416,44 @@ class Strings implements \ArrayAccess
       }
       $assoc[$key] = $val;
     }
+
     return $assoc;
+  }
+
+  /**
+   * Find all keys matching a regular expression.
+   *
+   * @param string $regex  The pattern we're looking for.
+   * @param bool $strip  If true, remove the regex from the returned keys.
+   *
+   * @return array  A list of matching translation keys.
+   */
+  public function findKeys (string $regex, bool $strip=false, array $opts=[])
+    : array
+  {
+    $nses = $this->get_ns($opts);
+    $languages = $this->get_langs($opts);
+
+    $keys = [];
+
+    foreach ($languages as $language)
+    {
+      foreach ($nses as $ns)
+      {
+        if (isset($language[$ns]) && is_array($language[$ns]))
+        {
+          foreach ($language[$ns] as $key => $val)
+          {
+            if (preg_match($regex, $key))
+            { // Key matched the prefix.
+              $keys[] = ($strip ? preg_replace($regex, '', $key) : $key);
+            }
+          }
+        }
+      }
+    }
+
+    return $keys;
   }
 
   // A weird undocumented method that I've used once and need to keep.
@@ -474,7 +518,7 @@ class Strings implements \ArrayAccess
     // TODO: try looking in the get cache first.
     // TODO: maybe implement a string cache?
     $nses = $this->get_ns($opts);
-    $languages = $this->get_lang($opts);
+    $languages = $this->get_langs($opts);
 
     foreach ($languages as $language)
     {
