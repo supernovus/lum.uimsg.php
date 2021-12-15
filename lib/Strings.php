@@ -576,7 +576,7 @@ class Strings implements \ArrayAccess
    * getStr() call, and then see if the output was the same as the input.
    * Avoid using this if at all possible.
    */ 
-  public function offsetExists ($offset) 
+  public function offsetExists ($offset): bool
   { // Simple, but non-optimized way of determining if the key exists.
     $newoffset = $this->getStr($offset);
     return $newoffset == $offset ? false : true;
@@ -590,7 +590,7 @@ class Strings implements \ArrayAccess
    *
    * @throws LangException
    */
-  public function offsetUnset ($offset)
+  public function offsetUnset ($offset): void
   {
     throw new LangException("Cannot unset translations.");
   }
@@ -603,7 +603,7 @@ class Strings implements \ArrayAccess
    * 
    * @throws LangException
    */
-  public function offsetSet ($offset, $value)
+  public function offsetSet ($offset, $value): void
   {
     throw new LangException("Cannot set translations.");
   }
@@ -614,7 +614,7 @@ class Strings implements \ArrayAccess
    * This is an alias to getStr() with all default settings (no options
    * can be passed obviously.)
    */
-  public function offsetGet ($offset)
+  public function offsetGet ($offset): mixed
   { // Return the results of getStr with default options.
     return $this->getStr($offset);
   }
