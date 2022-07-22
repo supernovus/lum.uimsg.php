@@ -13,7 +13,7 @@
   "require":
   {
     "lum/lum-compat": "^2.0",
-    "lum/lum-core": "^2.0"
+    "lum/lum-core": "^3.0"
   },
   "require-dev":
   {

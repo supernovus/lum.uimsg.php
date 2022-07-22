@@ -40,11 +40,14 @@ class Notifications
    */
   public static function getInstance ($opts=[])
   {
+    #error_log("Notifications::getInstance()");
     $core = \Lum\Core::getInstance();
     $sess = $core->sess;
     if (isset($sess->notifications))
     {
       $instance = $sess->notifications;
+      $cnt = $instance->msgCount();
+      #error_log("Found an instance in the session with '$cnt' messages");
       if ($instance->reparent)
       {
         if (isset($opts['text']))
@@ -55,6 +58,7 @@ class Notifications
     }
     else
     {
+      #error_log("No instance found in session");
       return new Notifications($opts);
     }
   }
@@ -70,6 +74,7 @@ class Notifications
    */
   public function __construct ($opts=[])
   {
+    #error_log("Notifications::__construct()");
     if (isset($opts['text']))
     {
       $this->text = $opts['text'];
